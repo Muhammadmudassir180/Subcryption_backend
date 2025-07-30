@@ -7,6 +7,7 @@ import connect_db from "./database/mongodb.js";
 import errormiddleware from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
 import {arcjetMiddleware} from "./middleware/arcjet.middleware.js";
+import workflowRouter from "./routes/workflowroute.js";
 
 
 const app=express();
@@ -18,6 +19,7 @@ app.use(arcjetMiddleware);
 app.use("/api/v1/auth",authRoute);
 app.use("/api/v1/subscription",subRoute);
 app.use("/api/v1/user",UserRoute);
+app.use("/api/v1/workflow",workflowRouter);
 app.use(errormiddleware)
 
 

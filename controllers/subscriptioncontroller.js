@@ -1,5 +1,7 @@
 import subscriptionRoute from "../routes/subscriptionRoute.js";
 import subscription  from "../models/subscriptionModel.js";
+import {workflowClient} from "../config/upstash.js";
+import {SERVER_URL} from "../config/env.js";
 
 export const createsubscryption = async (req, res,next) => {
     try{
@@ -8,6 +10,10 @@ export const createsubscryption = async (req, res,next) => {
         user: req.user._id,
         }
     );
+    await workflowClient.trigger({
+        url:`${SERVER_URL}/api/v1/workflows/subscription/reminder`,
+    })
+
 
     res.status(201).json({
         status:"success",
