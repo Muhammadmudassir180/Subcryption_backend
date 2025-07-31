@@ -10,10 +10,14 @@ export const createsubscryption = async (req, res,next) => {
         user: req.user._id,
         }
     );
-    await workflowClient.trigger({
-        url:`${SERVER_URL}/api/v1/workflows/subscription/reminder`,
-    })
-
+    
+    // Temporarily comment out Qstash workflow for testing
+    // await workflowClient.trigger({
+    //     url:`${SERVER_URL}/api/v1/workflows/subscription/reminder`,
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    // })
 
     res.status(201).json({
         status:"success",
@@ -28,22 +32,21 @@ export const createsubscryption = async (req, res,next) => {
     }
 }
 
-export const getUsersubscryption = async (req, res,next) => {
-    try{
-        //check if the user is the same as token
-        if (req.user._id !== req.user._id) {
-            res.status(401).json({
-                status:"error",
-                message:"You are not the owner of this account"
-            })
+export const getUsersubscryption = async (req, res, next) => {
+    try {
+        // Properly check if the user is requesting their own subscriptions
+        if (req.user._id.toString() !== req.params.id) {
+            return res.status(401).json({
+                status: "error",
+                message: "You are not the owner of this account"
+            });
         }
-        const sub= await subscription.find({user:req.params.id});
+        const sub = await subscription.find({ user: req.params.id });
         res.status(200).json({
-            status:"success",
-            data:sub
-        })
-
-    }catch(err){
+            status: "success",
+            subscriptions: sub
+        });
+    } catch (err) {
         next(err);
     }
 }
