@@ -95,7 +95,7 @@ export const updatesubscryption = async (req, res,next) => {
                 message:"You are not the owner of this account"
             })
         }
-        const sub= await subscription.findByIdAndUpdate(req.params.id);
+        const sub= await subscription.findByIdAndUpdate(req.params.id,req.body);
         res.status(200).json({
             status:"success",
             data:sub
