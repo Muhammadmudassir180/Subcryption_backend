@@ -56,7 +56,7 @@ export const deletesubscryption = async (req, res,next) => {
         //         message:"You are not the owner of this account"
         //     })
         // }
-        const sub= await subscription.findOneAndDelete(req.params.id);
+        const sub= await subscription.findByIdAndDelete(req.params.id);
         res.status(200).json({
             status:"success",
             data:sub
